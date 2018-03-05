@@ -4,7 +4,19 @@
     <title></title>
 </head>
 <body>
+    <h1>IMAGE BOARD</h1>
+    <h2>latest images</h2>
+
+    <div id="main">
+        <div v-for="image in images">
+            <p>{{image.title}}</p>
+            <img v-bind:src="image.image" alt="">
+        </div>
+    </div>
+
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
+    <script src="/js/script.js"></script>
+
 </body>
 </html>
