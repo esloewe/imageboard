@@ -30,20 +30,14 @@
                     // results in axios is literally the stuff we res.json
                     console.log("upload worked", results);
                     this.images.unshift(results.data.image);
-
-                    //reset all the values on the vmodel form set them to empty strings
-
-                    // the image data will be in results data image
-                    // unshift the new image into this.images by using the array method by adding to the beginning using unshift method
+                    this.form = "";
                 });
             }
         },
         mounted: function() {
             axios.get("/images").then(results => {
                 console.log("results", results);
-                //attach this to out data
                 this.images = results.data.images;
-                //create a v-for, loop thhrough images and display
             });
         }
     });
