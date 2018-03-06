@@ -6,11 +6,20 @@ const db = spicedPg(
 );
 
 exports.getImages = function() {
-    return db.query(`SELECT * FROM images`).then(function(results) {
-        return results.rows;
-        console.log(results);
-    });
+    return db
+        .query(`SELECT * FROM images ORDER BY created_at DESC`)
+        .then(function(results) {
+            return results.rows;
+        });
 };
 
-// SELECT * FROM images LIMIT 10
-//     ORDER BY created_at DESC
+exports.uploadsInDatabase = function(username, title, description, imageName) {
+    return db
+        .query(
+            `INSERT INTO images (username, title, description, image) VALUES ($1, $2, $3, $4) RETURNING id`,
+            [username, title, description, imageName]
+        )
+        .then(function(results) {
+            return results.rows[0].id;
+        });
+};

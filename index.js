@@ -1,15 +1,30 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const { getImages } = require("./database");
+const { getImages, uploadsInDatabase } = require("./database");
 const config = require("./config");
+const path = require("path");
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const s3 = require("./s3");
 
-const spicedPg = require("spiced-pg");
+var diskStorage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: function(req, file, callback) {
+        uidSafe(24).then(function(uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    }
+});
 
-const db = spicedPg(
-    process.env.DATABASE_URL ||
-        "postgres:postgres:postgres@localhost:5432/imageboard"
-);
+var uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152
+    }
+});
 
 app.use(express.static("./public"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,31 +40,45 @@ app.get("/images", (req, res) => {
         });
         res.json({ images: images });
     });
+});
 
-    // const q = `SELECT * from IMAGES`;
-    // db.query(q).then(results => {
-    //     let images = results.rows;
-    //     images.forEach(function(item) {
-    //         let url = config.s3Url + item.image; // this gives me the amazon part of the url
-    //         item.image = url;
-    //     });
-    //     res.json({ images: images });
-    //     console.log(results.rows);
-    // });
+app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
+    console.log("inside post upload");
+    // If nothing went wrong the file is already in the uploads directory
+
+    if (req.file) {
+        uploadsInDatabase(
+            req.body.title,
+            req.body.description,
+            req.body.username,
+            req.file.filename
+        ).then(id => {
+            res.json({
+                image: {
+                    title: req.body.title,
+                    description: req.body.description,
+                    username: req.body.username,
+                    image: config.s3Url + req.file.filename,
+                    id
+                },
+
+                success: true
+            });
+        });
+    } else {
+        res.json({
+            success: false
+        });
+    }
 });
 
 app.listen(8080, () => {
     console.log("listening");
 });
 
-// res.json({
-//     images: results.rows
-// });
-//
-// function requiringImages() {
-//     getImages().then(function() {
-//         results.rows.forEach(function(image) {
-//             image.image = config.s3url + image.image;
-//         });
-//     });
-// }
+//results: results,
+// username: results.username,
+// title: results.title,
+// description: results.description,
+// imageName: results.image,
+//then, res.json back the data of the new image
