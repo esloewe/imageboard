@@ -24,7 +24,7 @@
                 this.username = resp.data.image.username;
                 this.title = resp.data.image.title;
                 this.description = resp.data.image.description;
-                this.comments;
+                this.comments = resp.data.image.comment;
             });
         },
         methods: {
@@ -38,8 +38,7 @@
                         username: this.commentForm.username
                     })
                     .then(function() {
-                        //we need to work on this partttt
-                        // this.comments.unshift(this.comments);
+                        this.comments.unshift(this.comments);
                     });
             }
         }

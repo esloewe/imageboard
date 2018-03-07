@@ -58,7 +58,7 @@ app.get("/image/:imageId", (req, res) => {
         //results of getimagesbyid and and fix s3 url concat below.
         //res.json back the image info and the comments
         //then add this to then on post request after axios. get thing
-        image.image[0] = config.s3Url + image.image[0];
+        image[0] = config.s3Url + image[0].image;
         res.json({
             image: image[0],
             imageComments: image[1]
