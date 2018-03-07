@@ -23,3 +23,36 @@ exports.uploadsInDatabase = function(username, title, description, imageName) {
             return results.rows[0].id;
         });
 };
+
+exports.singleImage = function() {
+    return db.query(`SELECT * FROM comments`).then(function(results) {
+        return results.rows[0];
+    });
+};
+
+exports.getImageById = function(id) {
+    return db
+        .query(`SELECT * FROM images WHERE id = $1`, [id])
+        .then(function(results) {
+            return results.rows[0];
+        });
+};
+
+exports.addComment = function(image_id, comment, username) {
+    return db
+        .query(
+            `INSERT INTO comments (image_id, comment, username) VALUES ($1, $2, $3)`,
+            [image_id, comment, username]
+        )
+        .then(function(results) {
+            return results.rows[0];
+        });
+};
+
+exports.getComments = function(image_id) {
+    return db
+        .query(`SELECT * FROM comments WHERE image_id = $1`, [image_id])
+        .then(function(results) {
+            return results.rows;
+        });
+};

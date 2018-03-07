@@ -1,1 +1,32 @@
+body {
+    margin: 0;
+    background-color: #505050;
+}
 
+.main {
+    margin: 0 auto;
+}
+form {
+    margin-bottom: 50px;
+}
+
+.image-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.images {
+    border: 1px solid pink;
+}
+img {
+    width: 450px;
+    height: auto;
+}
+
+#modal {
+    background-color: pink;
+    border: 2px solid black;
+}

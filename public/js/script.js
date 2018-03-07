@@ -1,8 +1,55 @@
 (function() {
+    Vue.component("single-image", {
+        //child of main
+        props: ["id"],
+        data: function() {
+            return {
+                image: "",
+                username: "",
+                title: "",
+                description: "",
+                comments: [],
+                commentForm: {
+                    comment: "",
+                    username: ""
+                }
+            };
+        },
+        template: "#modal",
+
+        mounted: function() {
+            //this get route should also return the comments associated with this image
+            axios.get("/image/" + this.id).then(resp => {
+                this.image = resp.data.image.image;
+                this.username = resp.data.image.username;
+                this.title = resp.data.image.title;
+                this.description = resp.data.image.description;
+                this.comments;
+            });
+        },
+        methods: {
+            commentPost: function(e) {
+                e.preventDefault();
+                axios
+                    .post("/comments", {
+                        // this part add my comments to comments database
+                        imageId: this.id,
+                        comment: this.commentForm.comment,
+                        username: this.commentForm.username
+                    })
+                    .then(function() {
+                        //we need to work on this partttt
+                        // this.comments.unshift(this.comments);
+                    });
+            }
+        }
+    });
+
     new Vue({
-        el: "#main", //where our app will load. el means element in this case we chose an id
+        el: "#main", //where our app will load. el means element in this case we chose an id - parent
         data: {
             images: [],
+            selectedImage: null,
             form: {
                 // v-model stuff on html
                 username: "",
@@ -32,6 +79,11 @@
                     this.images.unshift(results.data.image);
                     this.form = "";
                 });
+            },
+
+            showModal: function(id) {
+                console.log(id);
+                this.selectedImage = id;
             }
         },
         mounted: function() {

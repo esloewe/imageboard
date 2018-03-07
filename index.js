@@ -1,7 +1,14 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const { getImages, uploadsInDatabase } = require("./database");
+const {
+    getImages,
+    uploadsInDatabase,
+    singleImage,
+    getImageById,
+    addComment,
+    getComments
+} = require("./database");
 const config = require("./config");
 const path = require("path");
 const multer = require("multer");
@@ -28,6 +35,7 @@ var uploader = multer({
 
 app.use(express.static("./public"));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(require("body-parser").json());
 
 app.get("/images", (req, res) => {
     console.log("inside get request");
@@ -39,6 +47,22 @@ app.get("/images", (req, res) => {
             item.image = url;
         });
         res.json({ images: images });
+    });
+});
+
+app.get("/image/:imageId", (req, res) => {
+    const imageId = req.params.imageId;
+    Promise.all([getImageById(imageId), getComments(imageId)]).then(image => {
+        //promise all returns an array of results, the first indices is the results for get image by id
+        //the second if the results for get comments
+        //results of getimagesbyid and and fix s3 url concat below.
+        //res.json back the image info and the comments
+        //then add this to then on post request after axios. get thing
+        image.image[0] = config.s3Url + image.image[0];
+        res.json({
+            image: image[0],
+            imageComments: image[1]
+        });
     });
 });
 
@@ -72,13 +96,21 @@ app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
     }
 });
 
+app.post("/comments", (req, res) => {
+    console.log("coment strgd", req.body);
+    addComment(req.body.imageId, req.body.comment, req.body.username).then(
+        () => {
+            res.json({
+                comments: {
+                    id: req.body.imageId,
+                    comment: req.body.comment,
+                    username: req.body.username
+                }
+            });
+        }
+    );
+});
+
 app.listen(8080, () => {
     console.log("listening");
 });
-
-//results: results,
-// username: results.username,
-// title: results.title,
-// description: results.description,
-// imageName: results.image,
-//then, res.json back the data of the new image
