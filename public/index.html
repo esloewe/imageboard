@@ -20,7 +20,7 @@
 
             <div class="image-container">
                 <div class="images" v-for="image in images">
-                    <img  v-bind:src="image.image" alt="" v-on:click="showModal(image.id)">
+                    <img  v-bind:src="image.image" alt="" v-on:click="showModal(image.id) ">
                     <p>{{image.title}}</p>
                     <p>{{image.description}}</p>
                     <p>{{image.username}}</p>
@@ -30,7 +30,8 @@
 
             <single-image
                 v-if="selectedImage"
-                v-bind:id="selectedImage">
+                v-bind:id="selectedImage"
+                v-on:closemodal="closeModalP">
             </single-image>
 
         </div>
@@ -39,9 +40,12 @@
 
 
 
+
+
     <script id="modal" type="x-template">
-        <div>
+        <div class="modal">
             <h1>{{title}}</h1>
+            <div v-on:click="closeModal">X</div>
             <img v-bind:src="image" alt="">
             <p>{{username}}</p>
             <p>{{description}}</p>

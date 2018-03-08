@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    background-color: #505050;
+    background-color: #b8d8d8;
 }
 
 .main {
@@ -16,17 +16,26 @@ form {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .images {
-    border: 1px solid pink;
 }
 img {
     width: 450px;
     height: auto;
 }
 
-#modal {
-    background-color: pink;
-    border: 2px solid black;
+.modal {
+    position: absolute;
+    background-color: #294d4a;
+    border: 5px solid transparent;
+    width: 50%;
+    height: 70%;
+    top: 40%;
+    left: 25%;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    font-family: Helvetica, Arial, sans-serif;
+    overflow: scroll;
 }

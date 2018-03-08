@@ -7,7 +7,8 @@ const {
     singleImage,
     getImageById,
     addComment,
-    getComments
+    getComments,
+    getMoreImages
 } = require("./database");
 const config = require("./config");
 const path = require("path");
@@ -53,16 +54,31 @@ app.get("/images", (req, res) => {
 app.get("/image/:imageId", (req, res) => {
     const imageId = req.params.imageId;
     Promise.all([getImageById(imageId), getComments(imageId)]).then(image => {
-        //promise all returns an array of results, the first indices is the results for get image by id
-        //the second if the results for get comments
-        //results of getimagesbyid and and fix s3 url concat below.
-        //res.json back the image info and the comments
-        //then add this to then on post request after axios. get thing
-        image[0] = config.s3Url + image[0].image;
+        image[0].image = config.s3Url + image[0].image;
         res.json({
             image: image[0],
             imageComments: image[1]
         });
+    });
+});
+
+app.get("/moreimages", (req, res) => {
+    getMoreImages(req.query.id).then(results => {
+        console.log("testing for id", req.query.id);
+        console.log("testing for IDDDD", results);
+
+        let images = results;
+        images.forEach(function(item) {
+            let url = config.s3Url + item.image; // this gives me the amazon part of the url
+            item.image = url;
+        });
+        if (!results.length) {
+            res.sendStatus(500);
+        } else {
+            res.json({
+                moreImages: images
+            });
+        }
     });
 });
 
@@ -98,17 +114,14 @@ app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
 
 app.post("/comments", (req, res) => {
     console.log("coment strgd", req.body);
-    addComment(req.body.imageId, req.body.comment, req.body.username).then(
-        () => {
-            res.json({
-                comments: {
-                    id: req.body.imageId,
-                    comment: req.body.comment,
-                    username: req.body.username
-                }
-            });
-        }
-    );
+    addComment(req.body.imageId, req.body.comment, req.body.username).then((
+        results // when we are returning something from database or from select statememts and results can be called whatever i want
+    ) => {
+        console.log("results from database", results);
+        res.json({
+            results: results
+        });
+    });
 });
 
 app.listen(8080, () => {
