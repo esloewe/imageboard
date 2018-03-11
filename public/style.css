@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    /* background-color: #b8d8d8; */
+    /* background-image: linear-gradient(-225deg, #fffeff 0%, #d7fffe 100%); */
 }
 
 .title {
@@ -34,15 +34,30 @@ h3 {
 
 input {
     width: 200px;
-    font-size: 16px;
+    font-size: 14px;
     font-family: "Roboto", sans-serif;
 }
 
+input:hover {
+    border: 1px solid #95e0e7;
+    box-shadow: 0 0 2px #95e0e7;
+}
+
 button {
-    font-size: 20px;
+    font-size: 16px;
     font-family: "Roboto", sans-serif;
-    border-radius: 6px;
-    /* background: #aa78a6; */
+    border-radius: 12px;
+    background-color: white;
+    border: 1px solid #95e0e7;
+    box-shadow: 0 0 2px #95e0e7;
+    width: 100px;
+    padding: 3px;
+    margin-left: 10px;
+}
+
+button:hover {
+    border: 1px solid #74b3b9;
+    box-shadow: 0 0 2px #74b3b9;
 }
 
 .image-container {
@@ -56,24 +71,40 @@ button {
 .images {
     flex-basis: 450px;
     margin: 0 auto;
+    margin-bottom: 10px;
+    position: relative;
 }
+
+.images:hover .username-desc {
+    display: block;
+}
+
 img {
     width: 450px;
     height: auto;
 }
-.images:hover {
+.images img:hover {
     border: 1px solid #d3d3d3;
-    box-shadow: 0 0 2px white;
-    -webkit-box-shadow: 0 0 10px #333;
+    box-shadow: 0 0 2px #333;
+    -webkit-box-shadow: 0 0 7px #333;
 }
 
 .username-desc {
-    background-color: rgba(222, 222, 222, 0.5);
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0) 0,
+        rgba(0, 0, 0, 0.6) 100%
+    );
     font-family: "Roboto", sans-serif;
     font-size: 22px;
-    border: 1px solid #d3d3d3;
-    box-shadow: 0 0 0.5px #d3d3d3;
     padding: 10px;
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 600;
+    color: white;
+    width: 430px;
 }
 
 #image-title {
@@ -130,11 +161,13 @@ img {
 
 .comments-title-modal {
     font-family: "Roboto", sans-serif;
+    margin-left: 130px;
 }
 .title-in-modal {
     font-family: "Roboto", sans-serif;
     font-weight: bold;
     text-align: center;
+    text-transform: uppercase;
 }
 
 .modal p {
@@ -149,12 +182,8 @@ img {
     border: 3px solid transparent;
     border-radius: 6px;
     box-shadow: 0 0 0.5px #d3d3d3;
+    margin-left: 132px;
 }
-
-/* .commentsbox {
-    display: flex;
-    justify-content: center;
-} */
 
 .modal img {
     display: flex;
@@ -162,4 +191,28 @@ img {
     width: 800px;
     height: auto;
     margin: 0 auto;
+}
+
+@media screen and (max-width: 600px) {
+    .title img {
+        width: 300px;
+        height: auto;
+    }
+    .modal img {
+        width: 350px;
+    }
+
+    .all-comments {
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+    .comments-title-modal {
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    input {
+        width: 100px;
+        font-size: 14px;
+    }
 }

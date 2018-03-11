@@ -7,7 +7,7 @@ const db = spicedPg(
 
 exports.getImages = function() {
     return db
-        .query(`SELECT * FROM images ORDER BY created_at LIMIT 6`)
+        .query(`SELECT * FROM images ORDER BY created_at DESC LIMIT 8`)
         .then(function(results) {
             return results.rows;
         });
@@ -60,14 +60,10 @@ exports.getComments = function(image_id) {
 
 exports.getMoreImages = function(id) {
     return db
-        .query(`SELECT * FROM images WHERE id < $1 ORDER BY id DESC LIMIT 6`, [
+        .query(`SELECT * FROM images WHERE id < $1 ORDER BY id DESC LIMIT 8`, [
             id
         ])
         .then(function(results) {
             return results.rows;
         });
 };
-
-//SELECT * FROM images WHERE id < $1 ORDER BY id DESC infinite scroll
-//document.body.scrollHeight
-//document.body.scrollTop

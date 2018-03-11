@@ -20,7 +20,7 @@
         mounted: function() {
             //this get route should also return the comments associated with this image
             axios.get("/image/" + this.id).then(resp => {
-                console.log("resp", resp.data);
+                console.log("test on image part", resp);
                 this.image = resp.data.image.image;
                 this.username = resp.data.image.username;
                 this.title = resp.data.image.title;
@@ -128,6 +128,7 @@
                                     response.data.moreImages
                                 );
                             });
+                        console.log("go get more");
                     } else {
                         setTimeout(infiniteScroll, 1000);
                     }
@@ -146,14 +147,3 @@
         }
     });
 })();
-
-// when open a modal i set selectedImage to a value
-// selectedImage: location.hash.slice(1) || null
-// mounted(
-// var app = this;
-// window.addEventlistener("hashchange", function() {
-//     app.selectedImage = location.hash.slice(1)
-// })
-// )
-// set location.hash = "";
-// <a v-bind:href="'#' + image.id" <img  v-bind:src="image.image" alt="" v-on:click="showModal(image.id) ">
