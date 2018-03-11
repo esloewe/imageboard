@@ -40,13 +40,13 @@
                         username: this.commentForm.username
                     })
                     .then(function(resp) {
-                        console.log(
-                            "what we get back from jsonnn ",
-                            resp.data.results,
-                            self
-                        );
+                        console.log(resp.data.results, self);
                         //  resp.data.results refers to what we res.json in app.post comments
                         self.comments.unshift(resp.data.results);
+                        self.commentForm = {
+                            comment: "",
+                            username: ""
+                        };
                     });
             },
             closeModal: function() {
@@ -85,7 +85,7 @@
 
                 axios.post("/upload", formData).then(results => {
                     // results in axios is literally the stuff we res.json
-                    console.log("upload worked", results);
+
                     this.images.unshift(results.data.image);
                     this.form = {
                         username: "",
@@ -118,7 +118,6 @@
                         pageYOffset + window.innerHeight >=
                         document.body.scrollHeight
                     ) {
-                        console.log("appim", app.images);
                         axios
                             .get(
                                 "/moreimages?id=" +
@@ -129,7 +128,6 @@
                                     response.data.moreImages
                                 );
                             });
-                        console.log("log go get more");
                     } else {
                         setTimeout(infiniteScroll, 1000);
                     }

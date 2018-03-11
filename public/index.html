@@ -2,51 +2,70 @@
 <html>
 <head>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <title></title>
 </head>
 <body>
     <div class="container">
-        <h1>IMAGE BOARD</h1>
-        <h2>latest images</h2>
+        <div class="title">
+            <img src="/logo-imageboard.svg" alt="">
+        </div>
+
+
 
         <div id="main">
             <form>
+                <h4 class="text-post">Post an image the fits the mood</h4>
                 <input v-model="form.title" type="text" name="title" placeholder="title"value="">
                 <input v-model="form.description" type="text" name="description" placeholder="description" value="">
                 <input  v-model="form.username" type="text" name="username" placeholder="username" value="">
                 <input type="file" v-on:change="handleChange">
                 <button v-on:click="handleSubmit">submit</button>
+
             </form>
 
+            <h3>latest images</h3>
             <div class="image-container">
                 <div class="images" v-for="image in images">
                     <img  v-bind:src="image.image" alt="" v-on:click="showModal(image.id) ">
-                    <p>{{image.title}}</p>
-                    <p>{{image.description}}</p>
-                    <p>{{image.username}}</p>
+                         <div class="username-desc">
+                            <div id="image-title">
+                                {{image.title}}
+                            </div> </br>
+                            <div id="image-username-description">
+                                 {{image.username}}</br>
+                                {{image.description}}
+                             </div>
+                         </div>
+                    </div>
+
 
                 </div>
+
+                <single-image
+                    v-if="selectedImage"
+                    v-bind:id="selectedImage"
+                    v-on:closemodal="closeModalP">
+                </single-image>
+
             </div>
 
-            <single-image
-                v-if="selectedImage"
-                v-bind:id="selectedImage"
-                v-on:closemodal="closeModalP">
-            </single-image>
+
 
         </div>
 
     </div>
 
 
-
-
-
     <script id="modal" type="x-template">
+    <div class="extra">
+        <div class="overlay"></div>
         <div class="modal">
-            <h1>{{title}}</h1>
-            <div v-on:click="closeModal">X</div>
-            <img v-bind:src="image" alt="">
+
+            <div class="x"v-on:click="closeModal">X</div>
+            <img class="image-in-model"v-bind:src="image" alt="">
+            <h2 class="title-in-modal">{{title}}</h2>
             <p>{{username}}</p>
             <p>{{description}}</p>
             <form class="formModal">
@@ -55,11 +74,15 @@
                 <button v-on:click="commentPost">Submit</button>
             </form>
 
-            <h1>Comments</h1>
+            <h3 class='comments-title-modal'>Comments</h3>
             <div v-for="comment in comments">
-                <div class ="all-comments">{{comment.comment}}</div>
+                <div class ="all-comments">
+                <div class="commentsbox"><b>{{comment.username}}</b> </div>  <div class="comment-in-comment">{{comment.comment}} <br> </div></div>
+                <br>
             </div>
+
          </div>
+    </div>
 
     </script>
 
