@@ -1,3 +1,7 @@
 node_modules
 .DS_Store
 secrets.json
+s3.js
+sql
+logo-imageboard.svg
+artboard.png
