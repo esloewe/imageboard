@@ -4,7 +4,7 @@ An image uploader app utilizing the following technologies:  **_Vue.js_, _node.j
 
 
 
-### Main Page - image upload 
+### Main page - image upload 
 
 
 
