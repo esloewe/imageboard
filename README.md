@@ -15,6 +15,8 @@ An image uploader app utilizing the following technologies:  **_Vue.js_, _node.j
 
 ### Modal from selected image
 
+Once a user selects an iamge from the main page a modal pops up providing the image information and a larger sized image aswell as giving the user the opportunity to write comments.
+
 
 
 <img width="750" alt="modal-imageboard" src="https://user-images.githubusercontent.com/35202276/38635483-c04ba66a-3dc5-11e8-805e-0a7aea175039.png">
