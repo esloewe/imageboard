@@ -39,12 +39,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require("body-parser").json());
 
 app.get("/images", (req, res) => {
-    console.log("inside get request");
-
     getImages().then(results => {
         let images = results;
         images.forEach(function(item) {
-            let url = config.s3Url + item.image; // this gives me the amazon part of the url
+            let url = config.s3Url + item.image;
             item.image = url;
         });
         res.json({ images: images });
@@ -64,12 +62,9 @@ app.get("/image/:imageId", (req, res) => {
 
 app.get("/moreimages", (req, res) => {
     getMoreImages(req.query.id).then(results => {
-        console.log("testing for id", req.query.id);
-        console.log("testing for IDDDD", results);
-
         let images = results;
         images.forEach(function(item) {
-            let url = config.s3Url + item.image; // this gives me the amazon part of the url
+            let url = config.s3Url + item.image;
             item.image = url;
         });
         if (!results.length) {
@@ -83,9 +78,6 @@ app.get("/moreimages", (req, res) => {
 });
 
 app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
-    console.log("inside post upload");
-    // If nothing went wrong the file is already in the uploads directory
-
     if (req.file) {
         uploadsInDatabase(
             req.body.title,
@@ -113,15 +105,13 @@ app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
 });
 
 app.post("/comments", (req, res) => {
-    console.log("coment strgd", req.body);
-    addComment(req.body.imageId, req.body.comment, req.body.username).then((
-        results // when we are returning something from database or from select statememts and results can be called whatever i want
-    ) => {
-        console.log("results from database", results);
-        res.json({
-            results: results
-        });
-    });
+    addComment(req.body.imageId, req.body.comment, req.body.username).then(
+        results => {
+            res.json({
+                results: results
+            });
+        }
+    );
 });
 
 app.listen(8080, () => {
